@@ -1,0 +1,18 @@
+
+[Unit]
+Description=RabbitMQ Node with ETCD Peer Discovery
+After=etcd-member.service docker.socket
+Requires=docker.socket etcd-member.service
+
+[Service]
+ExecStart=/usr/bin/docker run \
+    --detach        \
+    --name rabbitmq \
+    --network host  \
+    --env RABBITMQ_ERLANG_COOKIE="${ erlang_cookie }" \
+    --env RABBITMQ_DEFAULT_USER="${ rbmq_username }"  \
+    --env RABBITMQ_DEFAULT_PASS="${ rbmq_password }"  \
+    devops4me/rabbitmq-3.7
+
+[Install]
+WantedBy=multi-user.target

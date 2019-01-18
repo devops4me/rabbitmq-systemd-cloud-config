@@ -1,0 +1,17 @@
+[Unit]
+Description=Sets up the inbuilt CoreOS etcd 3 key value store
+Requires=coreos-metadata.service
+After=coreos-metadata.service
+
+[Service]
+EnvironmentFile=/run/metadata/coreos
+ExecStart=
+ExecStart=/usr/lib/coreos/etcd-wrapper $ETCD_OPTS \
+  --listen-peer-urls="http://$${COREOS_EC2_IPV4_LOCAL}:2380" \
+  --listen-client-urls="http://0.0.0.0:2379" \
+  --initial-advertise-peer-urls="http://$${COREOS_EC2_IPV4_LOCAL}:2380" \
+  --advertise-client-urls="http://$${COREOS_EC2_IPV4_LOCAL}:2379" \
+  --discovery="${file_discovery_url}"
+
+[Install]
+WantedBy=multi-user.target
