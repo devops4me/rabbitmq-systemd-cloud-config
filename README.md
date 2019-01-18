@@ -68,7 +68,7 @@ Copy this into a file and then run **`terraform init`** and **`terraform apply -
 ```hcl
 module rabbitmq-ignition-config
 {
-    source        = "github.com/devops4me/terraform-ignition-rabbitmq-config"
+    source        = "github.com/devops4me/rabbitmq-systemd-cloud-config"
     in_node_count = 6
 }
 
@@ -227,7 +227,7 @@ If things aren't going as planned one troubleshooting tactic is to **validate yo
 If the service file is not already on CoreOS machine you SSH in and use wget to download (say from Github) like this.
 
 ```bash
-DOWNLOAD_URL=https://raw.githubusercontent.com/devops4me/terraform-ignition-rabbitmq-config/master/systemd-rabbitmq.service
+DOWNLOAD_URL=https://raw.githubusercontent.com/devops4me/rabbitmq-systemd-cloud-config/master/systemd-rabbitmq.service
 wget $DOWNLOAD_URL
 sudo cp systemd-rabbitmq.service /etc/systemd/system/rabbitmq.manual.service
 sudo systemctl start rabbitmq.manual
