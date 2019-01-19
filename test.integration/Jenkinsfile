@@ -1,7 +1,14 @@
 
 pipeline
 {
-    agent { dockerfile true }
+
+    agent
+    {
+        dockerfile
+        {
+	    dir 'test.integration'
+        }
+    }
 
     stages
     {
@@ -9,22 +16,23 @@ pipeline
         {
             steps
             {
-		sh 'terraform init integration.test'
+		sh 'terraform init'
             }
         }
         stage('terraform apply')
         {
             steps
             {
-		sh 'terraform apply -auto-approve integration.test'
+		sh 'terraform apply -auto-approve'
             }
         }
         stage('terraform destroy')
         {
             steps
             {
-		sh 'terraform destroy -auto-approve integration.test'
+		sh 'terraform destroy -auto-approve'
             }
         }
     }
+
 }

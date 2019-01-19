@@ -84,6 +84,34 @@ Your node is configured when you feed the output into the user data field of eit
 ---
 
 
+## Clusterable RabbitMQ 3.7 Docker Image
+
+This project builds a **clusterable RabbitMQ image** and pushes it to **DockerHub** ready for instantiation to Docker containers within a clusterable environment like Vagrant CoreOS, EC2 auto scaling groups, Kubernetes and/or Docker Swarm.
+
+This work incorporates the **[RabbitMQ auto-cluster plugin](https://github.com/hrzbrg/terraform-rabbitmq-autocluster)** as seen on GitHub.
+
+## RabbitMQ 3.7 | AutoCluster is now in-house
+
+From version 3.7 the **autocluster plugin has been pulled into** RabbitMQ's core codebase, thus **negating the need** to explicitly pull in **`autocluster-0.6.1.ez`** nor the need to enable the autocluster plugin during configuration.
+
+A number of changes have been made to autoclustering and this GitHub repo reflects the new way of configuring RabbitMQ and its peer discovery mechanisms. This repository **chooses etcd peer discovery** but can be adapted to use Consul, rabbitmqctl-admin, AWS autoscaling groups (launch configuration) and AWS EC2 tags.
+
+
+## Continuous Integration
+
+This repository can include a **Jenkinsfile**, a **gitlab-ci.yml** file and files that tell CircleCI, CodeShip, and/or TravisCI how to orchestrate the build pipeline and if successful, push the built Docker image into DockerHub.
+
+
+## How to Build RabbitMQ AutoCluster Image
+
+The CI/CD pipelines primarily exploit the below steps in order to build the resulting [RabbitMQ docker image and push it into DockerHub](https://hub.docker.com/r/devops4me/rabbitmq/).
+
+    $ docker build --rm --tag devops4me/rabbitmq .
+    $ docker push devops4me/rabbitmq
+
+---
+
+
 ## How does RabbitMQ find etcd?
 
 It is not immediately obvious how RabbitMQ is given its etcd's host url. The answer lies in
