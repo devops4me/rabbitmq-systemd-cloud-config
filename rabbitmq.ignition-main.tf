@@ -87,7 +87,8 @@ data template_file etcd3 {
     template = file( "${path.module}/systemd-etcd.service" )
 
     vars = {
-        file_discovery_url = data.external.url.result[ "etcd_discovery_url" ]
+        file_discovery_url = "https://discovery.etcd.io/63f4b767902943957c327d88fb55743c"
+#####        file_discovery_url = data.external.url.result[ "etcd_discovery_url" ]
     }
 }
 
@@ -161,6 +162,7 @@ resource random_string erlang_cookie {
  | -- The double dollar gives echo a single dollar to interpolate.
  | --
 */
+/*
 data external url {
     program = [
         "sh",
@@ -168,5 +170,5 @@ data external url {
         "echo { \"etcd_discovery_url\" : \"$$(curl -s https://discovery.etcd.io/new?size=${ var.in_node_count })\" }"
     ]
 }
-
+*/
 ### "echo { \\\"etcd_discovery_url\\\" : \\\"$$(curl -s https://discovery.etcd.io/new?size=${ var.in_node_count })\\\" }"
