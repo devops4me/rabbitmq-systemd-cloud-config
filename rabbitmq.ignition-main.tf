@@ -165,6 +165,8 @@ data external url {
     program = [
         "sh",
         "-c",
-        "echo { \\\"etcd_discovery_url\\\" : \\\"$$(curl -s https://discovery.etcd.io/new?size=${ var.in_node_count })\\\" }"
+        "echo { \"etcd_discovery_url\" : \"$$(curl -s https://discovery.etcd.io/new?size=${ var.in_node_count })\" }"
     ]
 }
+
+### "echo { \\\"etcd_discovery_url\\\" : \\\"$$(curl -s https://discovery.etcd.io/new?size=${ var.in_node_count })\\\" }"
