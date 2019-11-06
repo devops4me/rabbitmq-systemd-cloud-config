@@ -66,7 +66,7 @@ data template_file rabbitmq {
 
     template = file( "${path.module}/systemd-rabbitmq.service" )
 
-    vars {
+    vars = {
         erlang_cookie = random_string.erlang_cookie.result
         rbmq_username = var.in_rmq_username
         rbmq_password = random_string.password.result
@@ -86,7 +86,7 @@ data template_file rabbitmq {
 data template_file etcd3 {
     template = file( "${path.module}/systemd-etcd.service" )
 
-    vars {
+    vars = {
         file_discovery_url = data.external.url.result[ "etcd_discovery_url" ]
     }
 }
