@@ -10,12 +10,10 @@
  | -- in the correct order on every cluster node.
  | --
 */
-data ignition_config rabbitmq
-{
-    systemd =
-    [
-        "${data.ignition_systemd_unit.etcd3.id}",
-        "${data.ignition_systemd_unit.rabbitmq.id}"
+data ignition_config rabbitmq {
+    systemd = [
+        data.ignition_systemd_unit.etcd3.id,
+        data.ignition_systemd_unit.rabbitmq.id
     ]
 }
 
@@ -27,10 +25,9 @@ data ignition_config rabbitmq
  | -- the other ignition configuration blocks in ignition_config
  | --
 */
-data ignition_systemd_unit rabbitmq
-{
+data ignition_systemd_unit rabbitmq {
     name = "rabbitmq.service"
-    content = "${ data.template_file.rabbitmq.rendered }"
+    content = data.template_file.rabbitmq.rendered
     enabled = "true"
 }
 
@@ -42,14 +39,12 @@ data ignition_systemd_unit rabbitmq
  | -- the other ignition configuration blocks in ignition_config
  | --
 */
-data ignition_systemd_unit etcd3
-{
+data ignition_systemd_unit etcd3 {
     name = "etcd-member.service"
     enabled = "true"
-    dropin
-    {
+    dropin {
         name    = "20-clct-etcd-member.conf"
-        content = "${ data.template_file.etcd3.rendered }"
+        content = data.template_file.etcd3.rendered
     }
 }
 
@@ -67,15 +62,14 @@ data ignition_systemd_unit etcd3
  | -- cookie and inject it before rendering the template.
  | --
 */
-data template_file rabbitmq
-{
-    template = "${ file( "${path.module}/systemd-rabbitmq.service" ) }"
+data template_file rabbitmq {
 
-    vars
-    {
-        erlang_cookie = "${ random_string.erlang_cookie.result }"
-        rbmq_username = "${ var.in_rmq_username }"
-        rbmq_password = "${ random_string.password.result }"
+    template = file( "${path.module}/systemd-rabbitmq.service" )
+
+    vars {
+        erlang_cookie = random_string.erlang_cookie.result
+        rbmq_username = var.in_rmq_username
+        rbmq_password = random_string.password.result
     }
 }
 
@@ -89,13 +83,11 @@ data template_file rabbitmq
  | -- etcd discovery url that the python script returns.
  | --
 */
-data template_file etcd3
-{
-    template = "${ file( "${path.module}/systemd-etcd.service" ) }"
+data template_file etcd3 {
+    template = file( "${path.module}/systemd-etcd.service" )
 
-    vars
-    {
-        file_discovery_url = "${ data.external.url.result[ "etcd_discovery_url" ] }"
+    vars {
+        file_discovery_url = data.external.url.result[ "etcd_discovery_url" ]
     }
 }
 
@@ -108,8 +100,7 @@ data template_file etcd3
  | -- your safe through Terraform's output command.
  | --
 */
-resource random_string password
-{
+resource random_string password {
     length  = 20
     upper   = true
     lower   = true
@@ -127,8 +118,7 @@ resource random_string password
  | -- The cookie will hold 24 (and only 24) upper case letters.
  | --
 */
-resource random_string erlang_cookie
-{
+resource random_string erlang_cookie {
     length  = 24
     upper   = true
     lower   = false
@@ -171,10 +161,8 @@ resource random_string erlang_cookie
  | -- The double dollar gives echo a single dollar to interpolate.
  | --
 */
-data external url
-{
-    program =
-    [
+data external url {
+    program = [
         "sh",
         "-c",
         "echo { \\\"etcd_discovery_url\\\" : \\\"$$(curl -s https://discovery.etcd.io/new?size=${ var.in_node_count })\\\" }"
